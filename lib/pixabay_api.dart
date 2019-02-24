@@ -18,49 +18,52 @@ class PixabayImageProvider {
     this.language = language ?? 'en';
   }
 
-  Future<PixabayResponse> requestImages([int resultsPerPage = 30]) async {
-    String url = "https://pixabay.com/api/?key=" +
-        apiKey +
-        "&lang=" +
-        Uri.encodeFull(this.language) +
-        "&per_page=${resultsPerPage}";
-
-    var data = await getImages(url);
-
-    List<PixabayImage> images =
-        new List<PixabayImage>.generate(data["hits"].length, (index) {
-      return new PixabayImage.fromJson(data["hits"][index]);
-    });
-
-    PixabayResponse res = PixabayResponse(
-        total: data["total"], totalHits: data["totalHits"], hits: images);
-
-    return res;
+  Future<PixabayResponse> requestImages(
+      {int resultsPerPage = 30, int page, String category}) async {
+    return requestMediaWithKeyword(
+        media: MediaType.photo,
+        resultsPerPage: resultsPerPage,
+        page: page,
+        category: category);
   }
 
   // pageing is prepared but not used yet
   // we just return the first 30 image
   Future<PixabayResponse> requestImagesWithKeyword(
-      {String keyword, int resultsPerPage}) async {
-    // Search for image associated with the keyword
-    String url = "https://pixabay.com/api/?key=" +
-        apiKey +
-        "&q=" +
-        Uri.encodeFull(keyword) +
-        "&lang=" +
-        Uri.encodeFull(this.language) +
-        "&per_page=${resultsPerPage}";
+      {String keyword,
+      int resultsPerPage = 30,
+      int page,
+      String category}) async {
+    return requestMediaWithKeyword(
+        media: MediaType.photo,
+        keyword: keyword,
+        resultsPerPage: resultsPerPage,
+        page: page,
+        category: category);
+  }
 
-    var data = await getImages(url);
-    List<PixabayImage> images =
-        new List<PixabayImage>.generate(data['hits'].length, (index) {
-      return new PixabayImage.fromJson(data['hits'][index]);
-    });
+  Future<PixabayResponse> requestVideos(
+      {int resultsPerPage = 30, int page, String category}) async {
+    return requestMediaWithKeyword(
+        media: MediaType.video,
+        resultsPerPage: resultsPerPage,
+        page: page,
+        category: category);
+  }
 
-    PixabayResponse res = PixabayResponse(
-        total: data["total"], totalHits: data["totalHits"], hits: images);
-
-    return res;
+  // pageing is prepared but not used yet
+  // we just return the first 30 image
+  Future<PixabayResponse> requestVideosWithKeyword(
+      {String keyword,
+      int resultsPerPage = 30,
+      int page,
+      String category}) async {
+    return requestMediaWithKeyword(
+        media: MediaType.video,
+        keyword: keyword,
+        resultsPerPage: resultsPerPage,
+        page: page,
+        category: category);
   }
 
   getImages(String url) async {
@@ -82,12 +85,31 @@ class PixabayImageProvider {
     }
   }
 
-  Future<BytesBuilder> downloadMedia(PixabayMedia media, Resolution res,
+  getVideos(String url) async {
+    // setup Http Get
+    HttpClient httpClient = new HttpClient();
+    HttpClientRequest request = await httpClient.getUrl(Uri.parse(url));
+    HttpClientResponse response = await request.close();
+    // Process the response.
+    if (response.statusCode == 200) {
+      // response: OK
+      // decode JSON
+      String json = await response.transform(utf8.decoder).join();
+      var data = jsonDecode(json);
+      return data;
+    } else {
+      // something went wrong :(
+      print("Http error: ${response.statusCode}");
+      return [];
+    }
+  }
+
+  Future<BytesBuilder> downloadMedia(PixabayMedia media, String res,
       [Function callback]) async {
     var completer = new Completer<BytesBuilder>();
 
     HttpClient httpClient = new HttpClient();
-    String downloadUrl = media.getDownloadLink(res);
+    String downloadUrl = media.getDownloadLink(res: res);
 
     print("Downloading $downloadUrl");
     HttpClientRequest request = await httpClient.getUrl(Uri.parse(downloadUrl));
@@ -120,67 +142,56 @@ class PixabayImageProvider {
     return completer.future;
   }
 
-  Future<PixabayResponse> requestVideos([int resultsPerPage = 20]) async {
-    String url = "https://pixabay.com/api/?key=" +
-        apiKey +
-        "&lang=" +
-        Uri.encodeFull(this.language) +
-        "&per_page=${resultsPerPage}";
+  Future<PixabayResponse> requestMediaWithKeyword(
+      {MediaType media,
+      String keyword,
+      int resultsPerPage = 30,
+      int page,
+      String category}) async {
+    // Search for media associated with the keyword
+    String url = "https://pixabay.com/api/";
+    PixabayResponse res;
 
-    var data = await getImages(url);
+    if (media == MediaType.video) url += "videos/";
 
-    List<PixabayImage> images =
-        new List<PixabayImage>.generate(data["hits"].length, (index) {
-      return new PixabayImage.fromJson(data["hits"][index]);
-    });
+    if (resultsPerPage < 3) // API restriction
+      resultsPerPage = 3;
 
-    PixabayResponse res = PixabayResponse(
-        total: data["total"], totalHits: data["totalHits"], hits: images);
+    url += "?key=" + apiKey;
 
-    return res;
-  }
+    if (keyword != null) url += "&q=" + Uri.encodeFull(keyword);
 
-  // pageing is prepared but not used yet
-  // we just return the first 30 image
-  Future<PixabayResponse> requestVideosWithKeyword(
-      {String keyword, int resultsPerPage}) async {
-    // Search for image associated with the keyword
-    String url = "https://pixabay.com/api/?key=" +
-        apiKey +
-        "&q=" +
-        Uri.encodeFull(keyword) +
-        "&lang=" +
-        Uri.encodeFull(this.language) +
-        "&per_page=${resultsPerPage}";
+    url +=
+        "&lang=" + Uri.encodeFull(this.language) + "&per_page=$resultsPerPage";
 
-    var data = await getImages(url);
-    List<PixabayVideo> images =
-        new List<PixabayVideo>.generate(data['hits'].length, (index) {
-      return new PixabayVideo.fromJson(data['hits'][index]);
-    });
+    if (category != null) url += "&category=$category";
+    if (page != null) url += "&page=$page";
 
-    PixabayResponse res = PixabayResponse(
-        total: data["total"], totalHits: data["totalHits"], hits: images);
+    if (media == MediaType.video) {
+      var data = await getVideos(url);
 
-    return res;
-  }
+      if (data != null && data.length > 0) {
+        List<PixabayVideo> videos =
+            new List<PixabayVideo>.generate(data['hits'].length, (index) {
+          return new PixabayVideo.fromJson(data['hits'][index]);
+        });
 
-  getVideos(String url) async {
-    // setup Http Get
-    HttpClient httpClient = new HttpClient();
-    HttpClientRequest request = await httpClient.getUrl(Uri.parse(url));
-    HttpClientResponse response = await request.close();
-    // Process the response.
-    if (response.statusCode == 200) {
-      // response: OK
-      // decode JSON
-      String json = await response.transform(utf8.decoder).join();
-      var data = jsonDecode(json);
-      return data;
+        res = PixabayResponse(
+            total: data["total"], totalHits: data["totalHits"], hits: videos);
+      }
     } else {
-      // something went wrong :(
-      print("Http error: ${response.statusCode}");
-      return [];
+      var data = await getImages(url);
+
+      if (data != null && data.length > 0) {
+        List<PixabayImage> images =
+            new List<PixabayImage>.generate(data['hits'].length, (index) {
+          return new PixabayImage.fromJson(data['hits'][index]);
+        });
+
+        res = PixabayResponse(
+            total: data["total"], totalHits: data["totalHits"], hits: images);
+      }
     }
+    return res;
   }
 }

@@ -13,23 +13,49 @@ import 'key.dart';
 void main() async {
   PixabayPicker picker = PixabayPicker(apiKey: ApiKey, language: "hu");
 
-  PixabayResponse res = await picker.api.requestImages(5);
+  PixabayResponse res = await picker.api
+      .requestImages(resultsPerPage: 1, category: Category.business);
 
-  res.hits.forEach((f) {
-    print(f);
-  });
+  if (res != null) {
+    res.hits.forEach((f) {
+      print(f);
+    });
+  }
 
   print("--------------------------------------");
 
   res = await picker.api
       .requestImagesWithKeyword(keyword: "kutya", resultsPerPage: 30);
 
-  res.hits.forEach((f) {
-    print(f);
-  });
+  if (res != null) {
+    res.hits.forEach((f) {
+      print(f);
+    });
 
-  BytesBuilder bytes =
-      await picker.api.downloadMedia(res.hits[0], Resolution.medium);
+    BytesBuilder bytes =
+        await picker.api.downloadMedia(res.hits[0], Resolution.medium);
 
-  print(bytes.length);
+    print(bytes.length);
+  }
+
+  res = await picker.api.requestVideos();
+
+  if (res != null) {
+    res.hits.forEach((f) {
+      print(f);
+    });
+  }
+
+  res = await picker.api
+      .requestVideosWithKeyword(keyword: "kutya", resultsPerPage: 30);
+  if (res != null) {
+    res.hits.forEach((f) {
+      print(f);
+    });
+
+    BytesBuilder bytes =
+        await picker.api.downloadMedia(res.hits[0], Resolution.medium);
+
+    print(bytes.length);
+  }
 }

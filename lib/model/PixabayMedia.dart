@@ -6,7 +6,60 @@
 
 enum MediaType { photo, video }
 
-enum Resolution { large, medium, small }
+class Resolution {
+  static String large = "large";
+  static String medium = "medium";
+  static String small = "small";
+  static String tiny = "tiny";
+
+  static List<String> resolutions = [large, medium, small, tiny];
+}
+
+class Category {
+  static String fashion = "fashion";
+  static String nature = "nature";
+  static String backgrounds = "backgrounds";
+  static String science = "science";
+  static String education = "education";
+  static String people = "people";
+  static String feelings = "feelings";
+  static String religion = "religion";
+  static String health = "health";
+  static String places = "places";
+  static String animals = "animals";
+  static String industry = "industry";
+  static String food = "food";
+  static String computer = "computer";
+  static String sports = "sports";
+  static String transportation = "transportation";
+  static String travel = "travel";
+  static String buildings = "buildings";
+  static String business = "business";
+  static String music = "music";
+
+  List<String> categories = [
+    fashion,
+    nature,
+    backgrounds,
+    science,
+    education,
+    people,
+    feelings,
+    religion,
+    health,
+    places,
+    animals,
+    industry,
+    food,
+    computer,
+    sports,
+    transportation,
+    travel,
+    buildings,
+    business,
+    music
+  ];
+}
 
 class PixabayResponse {
   int totalHits;
@@ -42,11 +95,11 @@ abstract class PixabayMedia {
       this.type});
   MediaType getType();
 
-  String getDownloadLink(Resolution res);
+  String getDownloadLink({String res});
 
   @override
   String toString() {
-    return (this.getDownloadLink(Resolution.medium) ?? "null") +
+    return (this.getDownloadLink(res: Resolution.medium) ?? "null") +
         " by " +
         this.user +
         " tags: " +
@@ -135,15 +188,14 @@ class PixabayImage extends PixabayMedia {
     );
   }
 
-  String getDownloadLink(Resolution res) {
-    switch (res) {
-      case Resolution.large:
-        return this.fullHDURL;
-      case Resolution.medium:
-        return this.largeImageURL;
-      case Resolution.small:
-        return this.webformatURL;
-    }
+  String getDownloadLink({String res}) {
+    if (res == Resolution.large)
+      return this.fullHDURL;
+    else if (res == Resolution.medium)
+      return this.largeImageURL;
+    else if (res == Resolution.small)
+      return this.webformatURL;
+    else if (res == Resolution.tiny) return this.webformatURL;
 
     return this.fullHDURL ?? this.largeImageURL ?? this.webformatURL;
   }
@@ -159,27 +211,18 @@ class PixabayVideoDescriptor {
   int width;
   int height;
   int size;
-  Resolution res;
+  String res;
 
   PixabayVideoDescriptor(
       {this.url, this.width, this.height, this.size, this.res});
 }
 
 class PixabayVideo extends PixabayMedia {
-  int id;
   String pageURL;
-  String type;
-  String tags;
+
   int duration;
   String pictureId;
   List<PixabayVideoDescriptor> videos;
-  int views;
-  int downloads;
-  int favorites;
-  int likes;
-  int comments;
-  int userId;
-  String user;
   String userImageURL;
 
   PixabayVideo({
@@ -211,15 +254,30 @@ class PixabayVideo extends PixabayMedia {
             type: type);
 
   factory PixabayVideo.fromJson(Map<String, dynamic> data) {
-    List<PixabayVideoDescriptor> videos =
-        new List<PixabayVideoDescriptor>.generate(data['videos'].length,
-            (index) {
-      return new PixabayVideoDescriptor(
-          url: data['videos'][index]['url'],
-          height: data['videos'][index]['height'],
-          width: data['videos'][index]['width'],
-          size: data['videos'][index]['size']);
-    });
+    Map large = data['videos']["large"];
+    Map medium = data['videos']["medium"];
+    Map small = data['videos']["small"];
+
+    List<PixabayVideoDescriptor> videos = [
+      new PixabayVideoDescriptor(
+          url: large['url'],
+          height: large['height'],
+          width: large['width'],
+          size: large['size'],
+          res: Resolution.large),
+      new PixabayVideoDescriptor(
+          url: medium['url'],
+          height: medium['height'],
+          width: medium['width'],
+          size: medium['size'],
+          res: Resolution.medium),
+      new PixabayVideoDescriptor(
+          url: small['url'],
+          height: small['height'],
+          width: small['width'],
+          size: small['size'],
+          res: Resolution.small)
+    ];
 
     return new PixabayVideo(
       id: data['id'],
@@ -240,12 +298,17 @@ class PixabayVideo extends PixabayMedia {
     );
   }
 
-  String getDownloadLink(Resolution res) {
+  String getDownloadLink({String res}) {
+    String url;
+
     videos.forEach((f) {
-      if (f.res == res) return f.url;
+      if (f.res == res) {
+        url = f.url;
+        return;
+      }
     });
 
-    return null;
+    return url;
   }
 
   @override
