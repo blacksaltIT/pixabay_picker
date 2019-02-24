@@ -4,6 +4,7 @@
 .packages
 .pub/
 
+example/key.dart
 build/
 ios/.generated/
 ios/Flutter/Generated.xcconfig
