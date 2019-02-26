@@ -1,14 +1,19 @@
 # pixabay_picker
 
-A new Flutter package project.
+A new Flutter/Dart package project.
 
 ## Getting Started
 
-This project is a starting point for a Dart
-[package](https://flutter.io/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+We have provided a pure dart API for getting media from pixabay.com.
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Later on we will enhance this project with a Flutter Media picker too.
+
+## Usage:
+
+```void main() async {
+  PixabayPicker picker = PixabayPicker(apiKey: ApiKey, language: "hu");
+
+  PixabayResponse res = await picker.api
+      .requestImages(resultsPerPage: 1, category: Category.business);
+      
+```
