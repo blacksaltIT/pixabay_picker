@@ -37,7 +37,7 @@ class Category {
   static String business = "business";
   static String music = "music";
 
-  List<String> categories = [
+  static List<String> categories = [
     fashion,
     nature,
     backgrounds,

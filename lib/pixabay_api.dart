@@ -27,6 +27,33 @@ class PixabayImageProvider {
         category: category);
   }
 
+  Stream<Map<String, Map<MediaType, PixabayResponse>>> requestMapByCategory(
+      {int photoResultsPerCategory,
+      int videoResultsPerCategory,
+      List<String> categories}) async* {
+    for (int i = 0; i < Category.categories.length; i++) {
+      PixabayResponse resVideo;
+      PixabayResponse resImage;
+
+      if (categories == null ||
+          categories.indexOf(Category.categories[i]) >= 0) {
+        String category = Category.categories[i];
+
+        if (photoResultsPerCategory != null)
+          resImage = await requestImages(
+              resultsPerPage: photoResultsPerCategory, category: category);
+
+        if (photoResultsPerCategory != null)
+          resVideo = await requestVideos(
+              resultsPerPage: videoResultsPerCategory, category: category);
+
+        yield Map.from({
+          category: {MediaType.photo: resImage, MediaType.video: resVideo}
+        });
+      }
+    }
+  }
+
   // pageing is prepared but not used yet
   // we just return the first 30 image
   Future<PixabayResponse> requestImagesWithKeyword(
