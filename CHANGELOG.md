@@ -1,3 +1,7 @@
+## [0.1.1] - 2019.03.07.
+
+* Added dartdoc documentation
+
 ## [0.1.0] - 2019.03.07.
 
 * First stable release 

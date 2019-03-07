@@ -4,8 +4,15 @@
  *
  */
 
+/// Currently only photo and video media type
+/// is supported
 enum MediaType { photo, video }
 
+/// To download a media you can provide a resolution
+/// large  - 1920 * 1080
+/// medium - 1280 *  720
+/// small  -  950 *  540
+/// tiny   -  640 *  360  
 class Resolution {
   static String large = "large";
   static String medium = "medium";
@@ -15,6 +22,7 @@ class Resolution {
   static List<String> resolutions = [large, medium, small, tiny];
 }
 
+/// Categories currently avaiable in pixabay.com
 class Category {
   static String fashion = "fashion";
   static String nature = "nature";
@@ -61,6 +69,7 @@ class Category {
   ];
 }
 
+/// class to wrap pixabay.com response
 class PixabayResponse {
   int totalHits;
   int total;
@@ -70,6 +79,7 @@ class PixabayResponse {
   PixabayResponse({this.total, this.totalHits, this.hits});
 }
 
+/// base class for returned media
 abstract class PixabayMedia {
   int id;
   int userId;
@@ -107,8 +117,7 @@ abstract class PixabayMedia {
   }
 }
 
-// Model for Unsplash Image
-
+/// Model of Pixabay Image
 class PixabayImage extends PixabayMedia {
   String largeImageURL;
   String fullHDURL;
@@ -217,6 +226,7 @@ class PixabayVideoDescriptor {
       {this.url, this.width, this.height, this.size, this.res});
 }
 
+/// Model of Pixabay Video
 class PixabayVideo extends PixabayMedia {
   String pageURL;
 

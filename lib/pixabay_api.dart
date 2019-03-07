@@ -10,6 +10,7 @@ import 'dart:io';
 
 import 'package:pixabay_picker/model/pixabay_media.dart';
 
+/// Class to access pixabay.com http API 
 class PixabayImageProvider {
   final String apiKey;
   String language;
@@ -18,6 +19,7 @@ class PixabayImageProvider {
     this.language = language ?? 'en';
   }
 
+  /// request random images by category
   Future<PixabayResponse> requestImages(
       {int resultsPerPage = 30, int page, String category}) async {
     return requestMediaWithKeyword(
@@ -27,6 +29,7 @@ class PixabayImageProvider {
         category: category);
   }
 
+  /// request random media (images and/or videos) for a list of categories
   Stream<Map<String, Map<MediaType, PixabayResponse>>> requestMapByCategory(
       {int photoResultsPerCategory,
       int videoResultsPerCategory,
@@ -54,8 +57,9 @@ class PixabayImageProvider {
     }
   }
 
-  // pageing is prepared but not used yet
-  // we just return the first 30 image
+  /// pageing is prepared but not used yet
+  /// request images for a given keyword or
+  /// search term
   Future<PixabayResponse> requestImagesWithKeyword(
       {String keyword,
       int resultsPerPage = 30,
@@ -69,6 +73,7 @@ class PixabayImageProvider {
         category: category);
   }
 
+  /// request random videos 
   Future<PixabayResponse> requestVideos(
       {int resultsPerPage = 30, int page, String category}) async {
     return requestMediaWithKeyword(
@@ -78,8 +83,9 @@ class PixabayImageProvider {
         category: category);
   }
 
-  // pageing is prepared but not used yet
-  // we just return the first 30 image
+  /// pageing is prepared but not used yet
+  /// request videos for a given keyword or
+  /// search term
   Future<PixabayResponse> requestVideosWithKeyword(
       {String keyword,
       int resultsPerPage = 30,
@@ -131,6 +137,8 @@ class PixabayImageProvider {
     }
   }
 
+  /// Common function to download media
+  /// pixabay.com does not prefer hotlinking
   Future<BytesBuilder> downloadMedia(PixabayMedia media, String res,
       [Function callback]) async {
     var completer = new Completer<BytesBuilder>();
@@ -169,6 +177,7 @@ class PixabayImageProvider {
     return completer.future;
   }
 
+  /// main request method for all kind of media
   Future<PixabayResponse> requestMediaWithKeyword(
       {MediaType media,
       String keyword,
