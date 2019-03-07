@@ -1,6 +1,6 @@
 name: pixabay_picker
 description: A new Dart/Flutter package for pixabay API
-version: 0.0.1
+version: 0.0.2
 author: Albert Papp <albert.papp@blacksalt.io>
 homepage: https://github.com/blacksaltIT/pixabay_picker
 
