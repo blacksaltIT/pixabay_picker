@@ -5,10 +5,10 @@
  */
 import 'dart:io';
 
-import 'package:pixabay_picker/model/PixabayMedia.dart';
+import 'package:pixabay_picker/model/pixabay_media.dart';
 import 'package:pixabay_picker/pixabay_api.dart';
 
-import 'key.dart';
+import 'key.dart'; // import your API key
 
 void main() async {
   PixabayImageProvider api =

@@ -8,7 +8,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:pixabay_picker/model/PixabayMedia.dart';
+import 'package:pixabay_picker/model/pixabay_media.dart';
 
 class PixabayImageProvider {
   final String apiKey;
