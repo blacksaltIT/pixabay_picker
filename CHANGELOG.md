@@ -1,3 +1,7 @@
+## [0.1.0] - 2019.03.07.
+
+* First stable release 
+
 ## [0.0.2] - 2019.03.07.
 
 * Updated README.md 
