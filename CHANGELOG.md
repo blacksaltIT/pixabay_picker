@@ -1,3 +1,7 @@
+## [0.1.2] - 2019.03.07.
+
+* Updated package information
+
 ## [0.1.1] - 2019.03.07.
 
 * Added dartdoc documentation
