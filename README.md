@@ -61,7 +61,7 @@ You can search for videos too
 
 ```
 
-### Get 3 video and 3 image for each cateory 
+### Get 3 video and 3 image for each category 
 
 ```
   Stream<Map<String, Map<MediaType, PixabayResponse>>> result =
