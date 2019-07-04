@@ -108,7 +108,7 @@ class PixabayImageProvider {
     if (response.statusCode == 200) {
       // response: OK
       // decode JSON
-      String json = await response.transform(utf8.decoder).join();
+      String json = await utf8.decoder.bind(response).join();
       var data = jsonDecode(json);
       return data;
     } else {
@@ -127,7 +127,7 @@ class PixabayImageProvider {
     if (response.statusCode == 200) {
       // response: OK
       // decode JSON
-      String json = await response.transform(utf8.decoder).join();
+      String json = await utf8.decoder.bind(response).join();
       var data = jsonDecode(json);
       return data;
     } else {
