@@ -1,4 +1,4 @@
-## [0.1.3] - 2019.07.08.
+## [0.1.4] - 2019.07.08.
 
 * Updated package according to recent dart SDK changes
 
