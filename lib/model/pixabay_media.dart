@@ -12,7 +12,7 @@ enum MediaType { photo, video }
 /// large  - 1920 * 1080
 /// medium - 1280 *  720
 /// small  -  950 *  540
-/// tiny   -  640 *  360  
+/// tiny   -  640 *  360
 class Resolution {
   static String large = "large";
   static String medium = "medium";
@@ -106,6 +106,7 @@ abstract class PixabayMedia {
   MediaType getType();
 
   String getDownloadLink({String res});
+  String getThumbnailLink();
 
   @override
   String toString() {
@@ -197,6 +198,14 @@ class PixabayImage extends PixabayMedia {
     );
   }
 
+  @override
+  String getThumbnailLink() {
+    // TODO: implement getThumbnailLink
+
+    return getDownloadLink(res: Resolution.tiny);
+  }
+
+  @override
   String getDownloadLink({String res}) {
     if (res == Resolution.large)
       return this.fullHDURL;
@@ -307,7 +316,7 @@ class PixabayVideo extends PixabayMedia {
       userImageURL: data["userImageURL"],
     );
   }
-
+  @override
   String getDownloadLink({String res}) {
     String url;
 
@@ -319,6 +328,16 @@ class PixabayVideo extends PixabayMedia {
     });
 
     return url;
+  }
+
+  @override
+  String getThumbnailLink() {
+    // TODO: implement getThumbnailLink
+    String cdnLink = "https://i.vimeocdn.com/video/";
+    String cdnExtension = ".jpg";
+    String res = "_640x360";
+
+    return cdnLink + id.toString() + res + cdnExtension;
   }
 
   @override

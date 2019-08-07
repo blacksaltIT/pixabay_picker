@@ -1,3 +1,7 @@
+## [0.1.5] - 2019.08.07.
+
+* Added getThumbnailLink() function
+
 ## [0.1.4] - 2019.07.08.
 
 * Updated package according to recent dart SDK changes

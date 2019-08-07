@@ -68,7 +68,9 @@ void main() async {
     var values = onData.values.toList();
     var keys = onData.keys.toList();
 
+    print(keys[0] + ": Thumbnail " + values[0][MediaType.video].hits[0].getThumbnailLink());
     print(keys[0] + ":" + values[0][MediaType.video].hits[0].toString());
+    print(keys[0] + ": Thumbnail " + values[0][MediaType.photo].hits[0].getThumbnailLink());
     print(keys[0] + ":" + values[0][MediaType.photo].hits[0].toString());
   });
 }
