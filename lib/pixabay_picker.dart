@@ -3,9 +3,9 @@ library pixabay_picker;
 import 'package:pixabay_picker/pixabay_api.dart';
 
 class PixabayPicker {
-  PixabayImageProvider api;
+  PixabayMediaProvider api;
 
   PixabayPicker({String apiKey, String language}) {
-    api = PixabayImageProvider(apiKey: apiKey, language: language);
+    api = PixabayMediaProvider(apiKey: apiKey, language: language);
   }
 }

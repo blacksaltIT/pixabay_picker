@@ -200,7 +200,6 @@ class PixabayImage extends PixabayMedia {
 
   @override
   String getThumbnailLink() {
-    // TODO: implement getThumbnailLink
 
     return getDownloadLink(res: Resolution.tiny);
   }
@@ -332,7 +331,7 @@ class PixabayVideo extends PixabayMedia {
 
   @override
   String getThumbnailLink() {
-    // TODO: implement getThumbnailLink
+   
     String cdnLink = "https://i.vimeocdn.com/video/";
     String cdnExtension = ".jpg";
     String res = "_640x360";

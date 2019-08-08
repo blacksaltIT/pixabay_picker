@@ -11,8 +11,8 @@ import 'package:pixabay_picker/pixabay_api.dart';
 import 'key.dart'; // import your API key
 
 void main() async {
-  PixabayImageProvider api =
-      PixabayImageProvider(apiKey: ApiKey, language: "hu");
+  PixabayMediaProvider api =
+      PixabayMediaProvider(apiKey: ApiKey, language: "hu");
 
   PixabayResponse res =
       await api.requestImages(resultsPerPage: 1, category: Category.business);

@@ -1,3 +1,9 @@
+## [0.2.0] - 2019.08.08.
+
+* Added test cases + stream handling for porgress
+* Renamed PixabayImageProvider in PixabayMediaProvider due to the fact that we provide videos too
+
+
 ## [0.1.5] - 2019.08.07.
 
 * Added getThumbnailLink() function

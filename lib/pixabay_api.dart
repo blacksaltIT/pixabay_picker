@@ -10,13 +10,17 @@ import 'dart:io';
 
 import 'package:pixabay_picker/model/pixabay_media.dart';
 
-/// Class to access pixabay.com http API 
-class PixabayImageProvider {
+/// Class to access pixabay.com http API
+class PixabayMediaProvider {
   final String apiKey;
   String language;
+  StreamController progressStreamController;
 
-  PixabayImageProvider({this.apiKey, String language}) {
+  PixabayMediaProvider({this.apiKey, String language}) {
     this.language = language ?? 'en';
+
+    progressStreamController =
+        new StreamController(onPause: () {}, onCancel: () {});
   }
 
   /// request random images by category
@@ -73,7 +77,7 @@ class PixabayImageProvider {
         category: category);
   }
 
-  /// request random videos 
+  /// request random videos
   Future<PixabayResponse> requestVideos(
       {int resultsPerPage = 30, int page, String category}) async {
     return requestMediaWithKeyword(
@@ -168,7 +172,10 @@ class PixabayImageProvider {
         double progress = downloaded / fileSize;
 
         if (callback != null) callback(progress);
-      }, onDone: () => completer.complete(contents));
+        progressStreamController.add(progress);
+      }, onDone: () {
+        completer.complete(contents);
+      });
     } else {
       // something went wrong :(
       print("Http error: ${response.statusCode}");
