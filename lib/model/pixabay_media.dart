@@ -334,7 +334,7 @@ class PixabayVideo extends PixabayMedia {
     String cdnExtension = ".jpg";
     String res = "_640x360";
 
-    return cdnLink + id.toString() + res + cdnExtension;
+    return cdnLink + pictureId.toString() + res + cdnExtension;
   }
 
   @override
