@@ -1,3 +1,7 @@
+## [0.2.2] - 2019.11.14.
+
+* Fixed StreamSubscription logic for cancel download
+
 ## [0.2.1] - 2019.08.28.
 
 * Fixed thumbnail url for videos
