@@ -15,12 +15,13 @@ class PixabayMediaProvider {
   final String apiKey;
   String language;
   StreamController progressStreamController;
+  StreamSubscription<List<int>> _downloadStreamSub;
 
   PixabayMediaProvider({this.apiKey, String language}) {
     this.language = language ?? 'en';
 
     progressStreamController =
-        new StreamController(onPause: () {}, onCancel: () {});
+        new StreamController(onPause: () {}, onCancel: () {_downloadStreamSub?.cancel();});
   }
 
   /// request random images by category
@@ -165,7 +166,7 @@ class PixabayMediaProvider {
 
       var contents = new BytesBuilder();
 
-      response.listen((List<int> data) {
+      _downloadStreamSub = response.listen((List<int> data) {
         downloaded += data.length;
         contents.add(data);
         // handle data
@@ -174,6 +175,7 @@ class PixabayMediaProvider {
         if (callback != null) callback(progress);
         progressStreamController.add(progress);
       }, onDone: () {
+        _downloadStreamSub = null;
         completer.complete(contents);
       });
     } else {
