@@ -20,8 +20,11 @@ class PixabayMediaProvider {
   PixabayMediaProvider({this.apiKey, String language}) {
     this.language = language ?? 'en';
 
-    progressStreamController =
-        new StreamController(onPause: () {}, onCancel: () {_downloadStreamSub?.cancel();});
+    progressStreamController = new StreamController(
+        onPause: () {},
+        onCancel: () {
+          _downloadStreamSub?.cancel();
+        });
   }
 
   /// request random images by category

@@ -1,3 +1,7 @@
+## [1.0.1] - 2019.11.15.
+
+* Reached Production stage
+
 ## [0.2.2] - 2019.11.14.
 
 * Fixed StreamSubscription logic for cancel download
