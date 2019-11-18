@@ -1,3 +1,7 @@
+## [1.0.2] - 2019.11.18.
+
+* Added handler for HTTP error
+
 ## [1.0.1] - 2019.11.15.
 
 * Reached Production stage

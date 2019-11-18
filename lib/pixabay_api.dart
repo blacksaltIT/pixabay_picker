@@ -20,7 +20,7 @@ class PixabayMediaProvider {
   PixabayMediaProvider({this.apiKey, String language}) {
     this.language = language ?? 'en';
 
-    progressStreamController = new StreamController(
+    progressStreamController = StreamController(
         onPause: () {},
         onCancel: () {
           _downloadStreamSub?.cancel();
@@ -109,7 +109,7 @@ class PixabayMediaProvider {
 
   getImages(String url) async {
     // setup Http Get
-    HttpClient httpClient = new HttpClient();
+    HttpClient httpClient = HttpClient();
     HttpClientRequest request = await httpClient.getUrl(Uri.parse(url));
     HttpClientResponse response = await request.close();
     // Process the response.
@@ -128,7 +128,7 @@ class PixabayMediaProvider {
 
   getVideos(String url) async {
     // setup Http Get
-    HttpClient httpClient = new HttpClient();
+    HttpClient httpClient = HttpClient();
     HttpClientRequest request = await httpClient.getUrl(Uri.parse(url));
     HttpClientResponse response = await request.close();
     // Process the response.
@@ -149,9 +149,9 @@ class PixabayMediaProvider {
   /// pixabay.com does not prefer hotlinking
   Future<BytesBuilder> downloadMedia(PixabayMedia media, String res,
       [Function callback]) async {
-    var completer = new Completer<BytesBuilder>();
+    var completer = Completer<BytesBuilder>();
 
-    HttpClient httpClient = new HttpClient();
+    HttpClient httpClient = HttpClient();
     String downloadUrl = media.getDownloadLink(res: res);
 
     print("Downloading $downloadUrl");
@@ -167,7 +167,7 @@ class PixabayMediaProvider {
       // String dir = (await getApplicationDocumentsDirectory()).path;
       //response.pipe(File('$dir/${image.getId()}.jpg').openWrite());
 
-      var contents = new BytesBuilder();
+      var contents = BytesBuilder();
 
       _downloadStreamSub = response.listen((List<int> data) {
         downloaded += data.length;
@@ -183,6 +183,7 @@ class PixabayMediaProvider {
       });
     } else {
       // something went wrong :(
+      completer.completeError("Http error: ${response.statusCode}");
       print("Http error: ${response.statusCode}");
     }
 
@@ -220,8 +221,8 @@ class PixabayMediaProvider {
 
       if (data != null && data.length > 0) {
         List<PixabayVideo> videos =
-            new List<PixabayVideo>.generate(data['hits'].length, (index) {
-          return new PixabayVideo.fromJson(data['hits'][index]);
+            List<PixabayVideo>.generate(data['hits'].length, (index) {
+          return PixabayVideo.fromJson(data['hits'][index]);
         });
 
         res = PixabayResponse(
@@ -232,8 +233,8 @@ class PixabayMediaProvider {
 
       if (data != null && data.length > 0) {
         List<PixabayImage> images =
-            new List<PixabayImage>.generate(data['hits'].length, (index) {
-          return new PixabayImage.fromJson(data['hits'][index]);
+            List<PixabayImage>.generate(data['hits'].length, (index) {
+          return PixabayImage.fromJson(data['hits'][index]);
         });
 
         res = PixabayResponse(
