@@ -179,6 +179,11 @@ class PixabayMediaProvider {
         progressStreamController.add(progress);
       }, onDone: () {
         _downloadStreamSub = null;
+        progressStreamController = StreamController(
+            onPause: () {},
+            onCancel: () {
+              _downloadStreamSub?.cancel();
+            });
         completer.complete(contents);
       });
     } else {
