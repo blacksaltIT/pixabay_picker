@@ -20,8 +20,7 @@ class PixabayMediaProvider {
   PixabayMediaProvider({this.apiKey, String language}) {
     this.language = language ?? 'en';
 
-    progressStreamController = StreamController(
-        onPause: () {},
+    progressStreamController = StreamController.broadcast(
         onCancel: () {
           _downloadStreamSub?.cancel();
         });
@@ -179,8 +178,7 @@ class PixabayMediaProvider {
         progressStreamController.add(progress);
       }, onDone: () {
         _downloadStreamSub = null;
-        progressStreamController = StreamController(
-            onPause: () {},
+        progressStreamController = StreamController.broadcast(
             onCancel: () {
               _downloadStreamSub?.cancel();
             });

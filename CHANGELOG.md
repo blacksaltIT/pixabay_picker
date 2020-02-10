@@ -1,3 +1,7 @@
+## [1.0.4] - 2020.02.10.
+
+* Make progress stream to broadcast stream
+
 ## [1.0.3] - 2019.12.03.
 
 * Fixed progress indicator bug

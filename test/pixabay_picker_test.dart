@@ -35,7 +35,8 @@ void main() async {
           progress = data;
           //print(data.toString());
         });
-        var bytes = await api.downloadMedia(res.hits[0], Resolution.medium);
+        await api.downloadMedia(res.hits[0], Resolution.medium);
+        subscription.cancel();
       }
       equals((res != null && res.hits.isNotEmpty && progress == 1.0) == true);
     });
