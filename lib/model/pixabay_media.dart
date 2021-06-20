@@ -71,26 +71,26 @@ class Category {
 
 /// class to wrap pixabay.com response
 class PixabayResponse {
-  int totalHits;
-  int total;
+  int? totalHits;
+  int? total;
 
-  List<PixabayMedia> hits;
+  List<PixabayMedia>? hits;
 
   PixabayResponse({this.total, this.totalHits, this.hits});
 }
 
 /// base class for returned media
 abstract class PixabayMedia {
-  int id;
-  int userId;
-  int views;
-  int comments;
-  int likes;
-  int favorites;
-  int downloads;
-  String tags;
-  String user;
-  String type;
+  int? id;
+  int? userId;
+  int? views;
+  int? comments;
+  int? likes;
+  int? favorites;
+  int? downloads;
+  String? tags;
+  String? user;
+  String? type;
 
   PixabayMedia(
       {this.id,
@@ -105,46 +105,46 @@ abstract class PixabayMedia {
       this.type});
   MediaType getType();
 
-  String getDownloadLink({String res});
-  String getThumbnailLink();
+  String? getDownloadLink({String? res});
+  String? getThumbnailLink();
 
   @override
   String toString() {
     return (this.getDownloadLink(res: Resolution.medium) ?? "null") +
         " by " +
-        this.user +
+        this.user! +
         " tags: " +
-        this.tags;
+        this.tags!;
   }
 }
 
 /// Model of Pixabay Image
 class PixabayImage extends PixabayMedia {
-  String largeImageURL;
-  String fullHDURL;
-  String webformatURL;
-  String previewURL;
-  String userImageURL;
-  String pageURL;
-  int webformatHeight;
-  int webformatWidth;
-  int imageWidth;
-  int imageHeight;
-  int previewHeight;
-  int imageSize;
-  int previewWidth;
+  String? largeImageURL;
+  String? fullHDURL;
+  String? webformatURL;
+  String? previewURL;
+  String? userImageURL;
+  String? pageURL;
+  int? webformatHeight;
+  int? webformatWidth;
+  int? imageWidth;
+  int? imageHeight;
+  int? previewHeight;
+  int? imageSize;
+  int? previewWidth;
 
   PixabayImage({
-    String tags,
-    String type,
-    String user,
-    int downloads,
-    int likes,
-    int id,
-    int userId,
-    int views,
-    int comments,
-    int favorites,
+    String? tags,
+    String? type,
+    String? user,
+    int? downloads,
+    int? likes,
+    int? id,
+    int? userId,
+    int? views,
+    int? comments,
+    int? favorites,
     this.largeImageURL,
     this.fullHDURL,
     this.webformatHeight,
@@ -199,12 +199,12 @@ class PixabayImage extends PixabayMedia {
   }
 
   @override
-  String getThumbnailLink() {
+  String? getThumbnailLink() {
     return getDownloadLink(res: Resolution.tiny);
   }
 
   @override
-  String getDownloadLink({String res}) {
+  String? getDownloadLink({String? res}) {
     if (res == Resolution.large)
       return this.fullHDURL;
     else if (res == Resolution.medium)
@@ -223,11 +223,11 @@ class PixabayImage extends PixabayMedia {
 }
 
 class PixabayVideoDescriptor {
-  String url;
-  int width;
-  int height;
-  int size;
-  String res;
+  String? url;
+  int? width;
+  int? height;
+  int? size;
+  String? res;
 
   PixabayVideoDescriptor(
       {this.url, this.width, this.height, this.size, this.res});
@@ -235,24 +235,24 @@ class PixabayVideoDescriptor {
 
 /// Model of Pixabay Video
 class PixabayVideo extends PixabayMedia {
-  String pageURL;
+  String? pageURL;
 
-  int duration;
-  String pictureId;
-  List<PixabayVideoDescriptor> videos;
-  String userImageURL;
+  int? duration;
+  String? pictureId;
+  List<PixabayVideoDescriptor>? videos;
+  String? userImageURL;
 
   PixabayVideo({
-    String tags,
-    String type,
-    String user,
-    int downloads,
-    int likes,
-    int id,
-    int userId,
-    int views,
-    int comments,
-    int favorites,
+    String? tags,
+    String? type,
+    String? user,
+    int? downloads,
+    int? likes,
+    int? id,
+    int? userId,
+    int? views,
+    int? comments,
+    int? favorites,
     this.pageURL,
     this.duration,
     this.pictureId,
@@ -315,10 +315,10 @@ class PixabayVideo extends PixabayMedia {
     );
   }
   @override
-  String getDownloadLink({String res}) {
-    String url;
+  String? getDownloadLink({String? res}) {
+    String? url;
 
-    videos.forEach((f) {
+    videos!.forEach((f) {
       if (f.res == res) {
         url = f.url;
         return;

@@ -12,12 +12,12 @@ import 'package:pixabay_picker/model/pixabay_media.dart';
 
 /// Class to access pixabay.com http API
 class PixabayMediaProvider {
-  final String apiKey;
-  String language;
-  StreamController progressStreamController;
-  StreamSubscription<List<int>> _downloadStreamSub;
+  final String? apiKey;
+  late String language;
+  late StreamController progressStreamController;
+  StreamSubscription<List<int>>? _downloadStreamSub;
 
-  PixabayMediaProvider({this.apiKey, String language}) {
+  PixabayMediaProvider({this.apiKey, String? language}) {
     this.language = language ?? 'en';
 
     progressStreamController = StreamController.broadcast(
@@ -27,8 +27,8 @@ class PixabayMediaProvider {
   }
 
   /// request random images by category
-  Future<PixabayResponse> requestImages(
-      {int resultsPerPage = 30, int page, String category}) async {
+  Future<PixabayResponse?> requestImages(
+      {int resultsPerPage = 30, int? page, String? category}) async {
     return requestMediaWithKeyword(
         media: MediaType.photo,
         resultsPerPage: resultsPerPage,
@@ -38,12 +38,12 @@ class PixabayMediaProvider {
 
   /// request random media (images and/or videos) for a list of categories
   Stream<Map<String, Map<MediaType, PixabayResponse>>> requestMapByCategory(
-      {int photoResultsPerCategory,
-      int videoResultsPerCategory,
-      List<String> categories}) async* {
+      {int? photoResultsPerCategory,
+      int? videoResultsPerCategory,
+      List<String>? categories}) async* {
     for (int i = 0; i < Category.categories.length; i++) {
-      PixabayResponse resVideo;
-      PixabayResponse resImage;
+      PixabayResponse? resVideo;
+      PixabayResponse? resImage;
 
       if (categories == null ||
           categories.indexOf(Category.categories[i]) >= 0) {
@@ -55,7 +55,7 @@ class PixabayMediaProvider {
 
         if (photoResultsPerCategory != null)
           resVideo = await requestVideos(
-              resultsPerPage: videoResultsPerCategory, category: category);
+              resultsPerPage: videoResultsPerCategory!, category: category);
 
         yield Map.from({
           category: {MediaType.photo: resImage, MediaType.video: resVideo}
@@ -67,11 +67,11 @@ class PixabayMediaProvider {
   /// pageing is prepared but not used yet
   /// request images for a given keyword or
   /// search term
-  Future<PixabayResponse> requestImagesWithKeyword(
-      {String keyword,
+  Future<PixabayResponse?> requestImagesWithKeyword(
+      {String? keyword,
       int resultsPerPage = 30,
-      int page,
-      String category}) async {
+      int? page,
+      String? category}) async {
     return requestMediaWithKeyword(
         media: MediaType.photo,
         keyword: keyword,
@@ -81,8 +81,8 @@ class PixabayMediaProvider {
   }
 
   /// request random videos
-  Future<PixabayResponse> requestVideos(
-      {int resultsPerPage = 30, int page, String category}) async {
+  Future<PixabayResponse?> requestVideos(
+      {int resultsPerPage = 30, int? page, String? category}) async {
     return requestMediaWithKeyword(
         media: MediaType.video,
         resultsPerPage: resultsPerPage,
@@ -93,11 +93,11 @@ class PixabayMediaProvider {
   /// pageing is prepared but not used yet
   /// request videos for a given keyword or
   /// search term
-  Future<PixabayResponse> requestVideosWithKeyword(
-      {String keyword,
+  Future<PixabayResponse?> requestVideosWithKeyword(
+      {String? keyword,
       int resultsPerPage = 30,
-      int page,
-      String category}) async {
+      int? page,
+      String? category}) async {
     return requestMediaWithKeyword(
         media: MediaType.video,
         keyword: keyword,
@@ -147,11 +147,11 @@ class PixabayMediaProvider {
   /// Common function to download media
   /// pixabay.com does not prefer hotlinking
   Future<BytesBuilder> downloadMedia(PixabayMedia media, String res,
-      [Function callback]) async {
+      [Function? callback]) async {
     var completer = Completer<BytesBuilder>();
 
     HttpClient httpClient = HttpClient();
-    String downloadUrl = media.getDownloadLink(res: res);
+    String downloadUrl = media.getDownloadLink(res: res)!;
 
     print("Downloading $downloadUrl");
     HttpClientRequest request = await httpClient.getUrl(Uri.parse(downloadUrl));
@@ -194,22 +194,22 @@ class PixabayMediaProvider {
   }
 
   /// main request method for all kind of media
-  Future<PixabayResponse> requestMediaWithKeyword(
-      {MediaType media,
-      String keyword,
+  Future<PixabayResponse?> requestMediaWithKeyword(
+      {MediaType? media,
+      String? keyword,
       int resultsPerPage = 30,
-      int page,
-      String category}) async {
+      int? page,
+      String? category}) async {
     // Search for media associated with the keyword
     String url = "https://pixabay.com/api/";
-    PixabayResponse res;
+    PixabayResponse? res;
 
     if (media == MediaType.video) url += "videos/";
 
     if (resultsPerPage < 3) // API restriction
       resultsPerPage = 3;
 
-    url += "?key=" + apiKey;
+    url += "?key=" + apiKey!;
 
     if (keyword != null) url += "&q=" + Uri.encodeFull(keyword);
 

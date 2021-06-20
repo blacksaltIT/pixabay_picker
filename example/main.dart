@@ -14,11 +14,11 @@ void main() async {
   PixabayMediaProvider api =
       PixabayMediaProvider(apiKey: ApiKey, language: "hu");
 
-  PixabayResponse res =
+  PixabayResponse? res =
       await api.requestImages(resultsPerPage: 1, category: Category.business);
 
   if (res != null) {
-    res.hits.forEach((f) {
+    res.hits!.forEach((f) {
       print(f);
     });
   }
@@ -29,12 +29,12 @@ void main() async {
       await api.requestImagesWithKeyword(keyword: "kutya", resultsPerPage: 30);
 
   if (res != null) {
-    res.hits.forEach((f) {
+    res.hits!.forEach((f) {
       print(f);
     });
 
     BytesBuilder bytes =
-        await api.downloadMedia(res.hits[0], Resolution.medium);
+        await api.downloadMedia(res.hits![0], Resolution.medium);
 
     print(bytes.length);
   }
@@ -42,7 +42,7 @@ void main() async {
   res = await api.requestVideos();
 
   if (res != null) {
-    res.hits.forEach((f) {
+    res.hits!.forEach((f) {
       print(f);
     });
   }
@@ -50,12 +50,12 @@ void main() async {
   res =
       await api.requestVideosWithKeyword(keyword: "kutya", resultsPerPage: 30);
   if (res != null) {
-    res.hits.forEach((f) {
+    res.hits!.forEach((f) {
       print(f);
     });
 
     BytesBuilder bytes =
-        await api.downloadMedia(res.hits[0], Resolution.medium);
+        await api.downloadMedia(res.hits![0], Resolution.medium);
 
     print(bytes.length);
   }
@@ -70,11 +70,11 @@ void main() async {
 
     print(keys[0] +
         ": Thumbnail " +
-        values[0][MediaType.video].hits[0].getThumbnailLink());
-    print(keys[0] + ":" + values[0][MediaType.video].hits[0].toString());
+        values[0][MediaType.video]!.hits![0].getThumbnailLink()!);
+    print(keys[0] + ":" + values[0][MediaType.video]!.hits![0].toString());
     print(keys[0] +
         ": Thumbnail " +
-        values[0][MediaType.photo].hits[0].getThumbnailLink());
-    print(keys[0] + ":" + values[0][MediaType.photo].hits[0].toString());
+        values[0][MediaType.photo]!.hits![0].getThumbnailLink()!);
+    print(keys[0] + ":" + values[0][MediaType.photo]!.hits![0].toString());
   });
 }
