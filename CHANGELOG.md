@@ -1,5 +1,9 @@
 ## [1.0.5] - 2021.06.20.
 
+* Added universal io to support multiple platforms
+
+## [1.0.5] - 2021.06.20.
+
 * Added null-safety
 
 ## [1.0.4] - 2020.02.10.

@@ -6,18 +6,23 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'package:universal_io/io.dart';
 
 import 'package:pixabay_picker/model/pixabay_media.dart';
 
 /// Class to access pixabay.com http API
 class PixabayMediaProvider {
-  final String? apiKey;
+  /// Store API key
+  final String apiKey;
+
+  /// language for search terms
   late String language;
+
   late StreamController progressStreamController;
   StreamSubscription<List<int>>? _downloadStreamSub;
 
-  PixabayMediaProvider({this.apiKey, String? language}) {
+  // API constructor
+  PixabayMediaProvider({required this.apiKey, String? language}) {
     this.language = language ?? 'en';
 
     progressStreamController = StreamController.broadcast(onCancel: () {
@@ -63,9 +68,9 @@ class PixabayMediaProvider {
     }
   }
 
+  /// request images for a given keyword or search term
+  ///
   /// pageing is prepared but not used yet
-  /// request images for a given keyword or
-  /// search term
   Future<PixabayResponse?> requestImagesWithKeyword(
       {String? keyword,
       int resultsPerPage = 30,
@@ -80,6 +85,8 @@ class PixabayMediaProvider {
   }
 
   /// request random videos
+  ///
+  /// pageing is prepared but not used yet
   Future<PixabayResponse?> requestVideos(
       {int resultsPerPage = 30, int? page, String? category}) async {
     return requestMediaWithKeyword(
@@ -89,9 +96,10 @@ class PixabayMediaProvider {
         category: category);
   }
 
+  /// request videos for a given keyword or search term
+  ///
   /// pageing is prepared but not used yet
-  /// request videos for a given keyword or
-  /// search term
+
   Future<PixabayResponse?> requestVideosWithKeyword(
       {String? keyword,
       int resultsPerPage = 30,
@@ -105,6 +113,7 @@ class PixabayMediaProvider {
         category: category);
   }
 
+  ///  get avaiable images for a [url] from pixabay
   getImages(String url) async {
     // setup Http Get
     HttpClient httpClient = HttpClient();
@@ -124,6 +133,7 @@ class PixabayMediaProvider {
     }
   }
 
+  ///  get avaiable videos for a [url] from pixabay
   getVideos(String url) async {
     // setup Http Get
     HttpClient httpClient = HttpClient();
@@ -143,8 +153,8 @@ class PixabayMediaProvider {
     }
   }
 
-  /// Common function to download media
-  /// pixabay.com does not prefer hotlinking
+  /// Common function to download media from pixabay cdn
+  /// remember pixabay.com does not prefer hotlinking
   Future<BytesBuilder> downloadMedia(PixabayMedia media, String res,
       [Function? callback]) async {
     var completer = Completer<BytesBuilder>();
@@ -191,7 +201,7 @@ class PixabayMediaProvider {
     return completer.future;
   }
 
-  /// main request method for all kind of media
+  /// main request method for all kind of media types
   Future<PixabayResponse?> requestMediaWithKeyword(
       {MediaType? media,
       String? keyword,
@@ -207,7 +217,7 @@ class PixabayMediaProvider {
     if (resultsPerPage < 3) // API restriction
       resultsPerPage = 3;
 
-    url += "?key=" + apiKey!;
+    url += "?key=" + apiKey;
 
     if (keyword != null) url += "&q=" + Uri.encodeFull(keyword);
 
