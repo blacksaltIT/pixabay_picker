@@ -20,10 +20,9 @@ class PixabayMediaProvider {
   PixabayMediaProvider({this.apiKey, String? language}) {
     this.language = language ?? 'en';
 
-    progressStreamController = StreamController.broadcast(
-        onCancel: () {
-          _downloadStreamSub?.cancel();
-        });
+    progressStreamController = StreamController.broadcast(onCancel: () {
+      _downloadStreamSub?.cancel();
+    });
   }
 
   /// request random images by category
@@ -37,7 +36,7 @@ class PixabayMediaProvider {
   }
 
   /// request random media (images and/or videos) for a list of categories
-  Stream<Map<String, Map<MediaType, PixabayResponse>>> requestMapByCategory(
+  Stream<Map<String, Map<MediaType, PixabayResponse?>>> requestMapByCategory(
       {int? photoResultsPerCategory,
       int? videoResultsPerCategory,
       List<String>? categories}) async* {
@@ -178,10 +177,9 @@ class PixabayMediaProvider {
         progressStreamController.add(progress);
       }, onDone: () {
         _downloadStreamSub = null;
-        progressStreamController = StreamController.broadcast(
-            onCancel: () {
-              _downloadStreamSub?.cancel();
-            });
+        progressStreamController = StreamController.broadcast(onCancel: () {
+          _downloadStreamSub?.cancel();
+        });
         completer.complete(contents);
       });
     } else {

@@ -60,11 +60,11 @@ void main() async {
     print(bytes.length);
   }
 
-  Stream<Map<String, Map<MediaType, PixabayResponse>>> result =
+  Stream<Map<String, Map<MediaType, PixabayResponse?>>> result =
       api.requestMapByCategory(
           photoResultsPerCategory: 3, videoResultsPerCategory: 3);
 
-  result.listen((Map<String, Map<MediaType, PixabayResponse>> onData) {
+  result.listen((Map<String, Map<MediaType, PixabayResponse?>> onData) {
     var values = onData.values.toList();
     var keys = onData.keys.toList();
 
