@@ -18,12 +18,17 @@ class PixabayMediaProvider {
   /// language for search terms
   late String language;
 
+  /// safe search, default is true
+  late bool safeSearch;
+
   late StreamController progressStreamController;
   StreamSubscription<List<int>>? _downloadStreamSub;
 
   // API constructor
-  PixabayMediaProvider({required this.apiKey, String? language}) {
+  PixabayMediaProvider(
+      {required this.apiKey, String? language, bool? safeSearch}) {
     this.language = language ?? 'en';
+    this.safeSearch = safeSearch ?? true;
 
     progressStreamController = StreamController.broadcast(onCancel: () {
       _downloadStreamSub?.cancel();
@@ -223,6 +228,8 @@ class PixabayMediaProvider {
 
     url +=
         "&lang=" + Uri.encodeFull(this.language) + "&per_page=$resultsPerPage";
+
+    url += "&safesearch=${this.safeSearch}";
 
     if (category != null) url += "&category=$category";
     if (page != null) url += "&page=$page";
