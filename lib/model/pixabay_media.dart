@@ -46,24 +46,24 @@ class Category {
   static String music = "music";
 
   static List<String> categories = [
-    fashion,
+    // fashion,
     nature,
-    backgrounds,
+    animals,
+    food,
+    places,
+    travel,
+    buildings,
     science,
     education,
     people,
     feelings,
-    religion,
+    backgrounds,
     health,
-    places,
-    animals,
+    religion,
     industry,
-    food,
     computer,
     sports,
     transportation,
-    travel,
-    buildings,
     business,
     music
   ];
@@ -73,10 +73,11 @@ class Category {
 class PixabayResponse {
   int? totalHits;
   int? total;
+  String? body;
 
   List<PixabayMedia>? hits;
 
-  PixabayResponse({this.total, this.totalHits, this.hits});
+  PixabayResponse({this.body, this.total, this.totalHits, this.hits});
 }
 
 /// base class for returned media

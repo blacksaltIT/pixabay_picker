@@ -12,10 +12,11 @@ Later on we will enhance this project with a Flutter Media picker too.
 
 ### Create API interface
 
-Note that you can search pixabay localized, if you set the language parameter accordingly in constructor
+Note that you can search pixabay localized, if you set the language parameter accordingly in constructor.
+Safe search is default true. You can change this value in the constructor.
 
 ```
-  PixabayPicker picker = PixabayPicker(apiKey: ApiKey, language: "hu");
+  PixabayPicker picker = PixabayPicker(apiKey: ApiKey, language: "hu", safeSearch: true);
 ```
 
 ### Get images for business category

@@ -18,12 +18,17 @@ class PixabayMediaProvider {
   /// language for search terms
   late String language;
 
+  /// safe search, default is true
+  late bool safeSearch;
+
   late StreamController progressStreamController;
   StreamSubscription<List<int>>? _downloadStreamSub;
 
   // API constructor
-  PixabayMediaProvider({required this.apiKey, String? language}) {
+  PixabayMediaProvider(
+      {required this.apiKey, String? language, bool? safeSearch}) {
     this.language = language ?? 'en';
+    this.safeSearch = safeSearch ?? true;
 
     progressStreamController = StreamController.broadcast(onCancel: () {
       _downloadStreamSub?.cancel();
@@ -120,12 +125,14 @@ class PixabayMediaProvider {
     HttpClientRequest request = await httpClient.getUrl(Uri.parse(url));
     HttpClientResponse response = await request.close();
     // Process the response.
+
+    print(response.headers);
+
     if (response.statusCode == 200) {
       // response: OK
       // decode JSON
       String json = await utf8.decoder.bind(response).join();
-      var data = jsonDecode(json);
-      return data;
+      return json;
     } else {
       // something went wrong :(
       print("Http error: ${response.statusCode}");
@@ -144,8 +151,7 @@ class PixabayMediaProvider {
       // response: OK
       // decode JSON
       String json = await utf8.decoder.bind(response).join();
-      var data = jsonDecode(json);
-      return data;
+      return json;
     } else {
       // something went wrong :(
       print("Http error: ${response.statusCode}");
@@ -224,11 +230,14 @@ class PixabayMediaProvider {
     url +=
         "&lang=" + Uri.encodeFull(this.language) + "&per_page=$resultsPerPage";
 
+    url += "&safesearch=${this.safeSearch}";
+
     if (category != null) url += "&category=$category";
     if (page != null) url += "&page=$page";
 
     if (media == MediaType.video) {
-      var data = await getVideos(url);
+      final jsonString = await getVideos(url);
+      final data = jsonDecode(jsonString);
 
       if (data != null && data.length > 0) {
         List<PixabayVideo> videos =
@@ -237,21 +246,33 @@ class PixabayMediaProvider {
         });
 
         res = PixabayResponse(
-            total: data["total"], totalHits: data["totalHits"], hits: videos);
+            body: jsonString,
+            total: data["total"],
+            totalHits: data["totalHits"],
+            hits: videos);
       }
     } else {
-      var data = await getImages(url);
+      print('url is: '+url);
+      final jsonString = await getImages(url);
+      final data = jsonDecode(jsonString);
 
-      if (data != null && data.length > 0) {
-        List<PixabayImage> images =
-            List<PixabayImage>.generate(data['hits'].length, (index) {
-          return PixabayImage.fromJson(data['hits'][index]);
-        });
-
-        res = PixabayResponse(
-            total: data["total"], totalHits: data["totalHits"], hits: images);
-      }
+      res = bodyToPixabayResponse(data, jsonString);
     }
     return res;
+  }
+
+  static PixabayResponse? bodyToPixabayResponse(data, jsonString) {
+    if (data != null && data.length > 0) {
+      List<PixabayImage> images =
+          List<PixabayImage>.generate(data['hits'].length, (index) {
+        return PixabayImage.fromJson(data['hits'][index]);
+      });
+
+      return PixabayResponse(
+          body: jsonString,
+          total: data["total"],
+          totalHits: data["totalHits"],
+          hits: images);
+    }
   }
 }
