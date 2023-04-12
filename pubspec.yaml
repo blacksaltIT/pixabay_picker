@@ -1,6 +1,6 @@
 name: pixabay_picker
 description: A Dart package for pixabay.com. With the api you can search or download videos and images from pixabay.com 
-version: 1.0.6
+version: 1.0.7
 homepage: https://github.com/blacksaltIT/pixabay_picker
 
 environment:

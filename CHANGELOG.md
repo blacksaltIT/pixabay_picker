@@ -1,4 +1,8 @@
-## [1.0.5] - 2021.06.20.
+## [1.0.7] - 2023.04.12.
+
+* Added safe search
+
+## [1.0.6] - 2021.06.20.
 
 * Added universal io to support multiple platforms
 
